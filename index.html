@@ -1819,13 +1819,32 @@ table.standingTable{
 @media(max-width:760px){.stadiumGrid{grid-template-columns:1fr}.stadiumHero{min-height:210px}}
 
 </style>
+
+<style id="v69-live-search-style">
+.searchBoxV69{position:relative;min-width:280px;flex:1;}
+.searchBoxV69 #search{width:100%;min-width:0;}
+.liveSearchResults{display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;border:1px solid rgba(119,214,255,.38);border-radius:16px;background:linear-gradient(180deg,rgba(10,25,43,.98),rgba(5,14,27,.98));box-shadow:0 20px 60px rgba(0,0,0,.55);overflow:hidden;text-align:left;max-height:420px;overflow-y:auto;}
+.liveSearchResults.open{display:block;}
+.liveSearchItem{width:100%;display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;border:0;border-bottom:1px solid rgba(255,255,255,.07);background:transparent;color:var(--text);padding:11px 13px;text-align:left;cursor:pointer;font:inherit;}
+.liveSearchItem:last-child{border-bottom:0;}
+.liveSearchItem:hover{background:rgba(119,214,255,.08);}
+.liveSearchType{color:var(--gold);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;}
+.liveSearchTitle{font-weight:900;line-height:1.2;}
+.liveSearchSub{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-weight:700;}
+.liveSearchPower{color:var(--gold);font-size:12px;font-weight:900;white-space:nowrap;}
+.searchModeActive #standingsIntro,.searchModeActive #groups,.searchModeActive #knockoutBracket{display:none!important;}
+.searchModeActive #groupCalendarIntro{margin-top:18px!important;border-color:rgba(255,209,102,.35)!important;}
+.searchResultLine{max-width:1320px;margin:0 auto 14px;color:#d9e8ff;font-size:14px;text-align:center;}
+@media(max-width:720px){.searchBoxV69{min-width:100%;}.liveSearchItem{grid-template-columns:1fr;gap:3px}.liveSearchPower{white-space:normal}}
+</style>
+
 </head>
 <body>
 <header>
-  <h1>FIFA World Cup 2026 – Interaktív naptár <span>v66</span></h1>
+  <h1>FIFA World Cup 2026 – Interaktív naptár <span>v69</span></h1>
   <p class="lead">Teljes csoportmeccs-kalendár, helyszínek, időpontok és kattintható meccskártyák. A csoportkör után látványos kieséses szakasz mutatja az utat a döntőig, később pedig minden meccshez játékoskeretek és statisztikák kapcsolhatók.</p>
   <div class="toolbar">
-    <input id="search" placeholder="Keresés: csapat, város, stadion, csoport..." />
+    <input id="search" placeholder="Keresés: csapat, játékos, edző, stadion, város, csoport..." />
     <select id="stage"><option value="">Minden szakasz</option></select>
     <select id="group"><option value="">Minden csoport</option></select>
     <button id="reset">Szűrők törlése</button>
@@ -2062,7 +2081,7 @@ const matches = [
 ].map(x=>({id:x[0],date:x[1],timeET:x[2],timeLocal:x[3],teamA:x[4],teamB:x[5],group:x[6],stage:x[7],venue:x[8],city:x[9],status:'scheduled',score:null,events:[],teamStats:{},playerStats:{}}));
 
 const STADIUMS = {
-  'Estadio Azteca|Mexico City': {name:'Estadio Azteca', city:'Mexico City', country:'Mexikó', capacity:'83 264', altitude:'kb. 2 240 m', opened:'1966', primaryUse:'Club América, mexikói válogatott', surface:'természetes fű', matches:'5 mérkőzés', role:'2026-os nyitómérkőzés helyszíne; történelmi stadion, amely már két férfi vb-döntőt is rendezett.', story:'A torna egyik legfontosabb szimbolikus helyszíne: magaslati fekvése, mérete és múltja miatt sportélettani és történelmi szempontból is kiemelt stadion.', imageUrl:'https://commons.wikimedia.org/wiki/Special:FilePath/Estadio_Azteca_desde_el_aire_1.jpg', credit:'Kép: v67: stadionfotók, popup-előzmény és szövegfix.'},
+  'Estadio Azteca|Mexico City': {name:'Estadio Azteca', city:'Mexico City', country:'Mexikó', capacity:'83 264', altitude:'kb. 2 240 m', opened:'1966', primaryUse:'Club América, mexikói válogatott', surface:'természetes fű', matches:'5 mérkőzés', role:'2026-os nyitómérkőzés helyszíne; történelmi stadion, amely már két férfi vb-döntőt is rendezett.', story:'A torna egyik legfontosabb szimbolikus helyszíne: magaslati fekvése, mérete és múltja miatt sportélettani és történelmi szempontból is kiemelt stadion.', imageUrl:'https://commons.wikimedia.org/wiki/Special:FilePath/Estadio_Azteca_desde_el_aire_1.jpg', credit:'Kép: v68: globális kereső és szűrők javítva.'},
   'Estadio Akron|Guadalajara': {name:'Estadio Akron', city:'Guadalajara', country:'Mexikó', capacity:'48 071', altitude:'kb. 1 560 m', opened:'2010', primaryUse:'C.D. Guadalajara', surface:'természetes fű', matches:'4 mérkőzés', role:'Guadalajara 2026-os helyszíne.', story:'Modern mexikói stadion, amely kompaktabb, de látványosabb környezetben ad otthont csoportmeccseknek.', imageUrl:'https://commons.wikimedia.org/wiki/Special:FilePath/EstadioAkronGDL.jpg', credit:'Kép: Wikimedia Commons · HugoGN12 · szabad licenc'},
   'Estadio BBVA|Monterrey': {name:'Estadio BBVA', city:'Monterrey', country:'Mexikó', capacity:'53 500', altitude:'kb. 540 m', opened:'2015', primaryUse:'C.F. Monterrey', surface:'természetes fű', matches:'4 mérkőzés', role:'Monterrey 2026-os helyszíne.', story:'Látványos, hegyek felé nyíló stadion, amely vizuálisan az egyik legerősebb mexikói helyszín.', imageUrl:'https://commons.wikimedia.org/wiki/Special:FilePath/Estadio_BBVA_Bancomer.jpg', credit:'Kép: Wikimedia Commons · szabad licenc / képforrás-jelölés'},
   'BMO Field|Toronto': {name:'BMO Field', city:'Toronto', country:'Kanada', capacity:'45 736', altitude:'kb. 76 m', opened:'2007', primaryUse:'Toronto FC, kanadai válogatott', surface:'természetes fű', matches:'6 mérkőzés', role:'Kanadai nyitómeccs helyszíne.', story:'Toronto városi stadionja; a kanadai futball egyik központi helyszíne.', imageUrl:'https://commons.wikimedia.org/wiki/Special:FilePath/Toronto_-_ON_-_BMO_Field.jpg', credit:'Kép: Wikimedia Commons · szabad licenc'},
@@ -2478,7 +2497,55 @@ function renderStandings(){
 }
 function init(){enableDialogBackdropClose();document.getElementById('stats').innerHTML=`<div class="stat"><b>${matches.length}</b><span>mérkőzés</span></div><div class="stat"><b>48</b><span>csapat</span></div><div class="stat"><b>12</b><span>csoport</span></div><div class="stat"><b>16</b><span>helyszín</span></div>`;loadMatchData();renderStandings();[...new Set(matches.map(m=>m.stage))].forEach(s=>stageSel.add(new Option(tStage(s),s)));Object.keys(groups).forEach(g=>groupSel.add(new Option(g+' csoport',g))); stageSel.value='Group Stage'; render(); renderBracket();}
 function dateLabel(d){return new Date(d+'T12:00:00').toLocaleDateString('hu-HU',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}function escAttr(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;', '"':'&quot;'}[c]));}
-function render(){let q=search.value.trim().toLowerCase(), st=stageSel.value, gr=groupSel.value;let filtered=matches.filter(m=>(!st||m.stage===st)&&(!gr||m.group===gr)&&(!q||[m.teamA,m.teamB,tTeam(m.teamA),tTeam(m.teamB),m.group,tStage(m.stage),m.stage,m.venue,m.city,m.id].join(' ').toLowerCase().includes(q)));let by={};filtered.forEach(m=>(by[m.date]??=[]).push(m));calendar.innerHTML=Object.keys(by).sort().map(d=>`<h2 class="day">${dateLabel(d)}</h2><div class="grid">${by[d].sort((a,b)=>magyarRendezoKulcs(a)-magyarRendezoKulcs(b)).map(card).join('')}</div>`).join('')||'<div class="empty">Nincs találat.</div>';document.querySelectorAll('.match').forEach(el=>el.onclick=()=>openMatch(matches.find(m=>m.id==el.dataset.id)));}
+function normalizeSearchText(value){
+  return String(value ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[’‘´`]/g,"'")
+    .replace(/[^a-z0-9áéíóöőúüűñçãõäöüß' -]/gi,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function teamSearchBlob(team){
+  const data = DEFAULT_TEAM_DATA && DEFAULT_TEAM_DATA.teams ? DEFAULT_TEAM_DATA.teams[team] : null;
+  if(!data) return [team,tTeam(team)].join(' ');
+  const parts=[team,tTeam(team),data.team,data.teamCode,data.group,data.coach&&data.coach.name,data.coach&&data.coach.firstNames,data.coach&&data.coach.lastNames,data.coach&&data.coach.nationality];
+  (data.players||[]).forEach(p=>{
+    parts.push(p.name,p.firstNames,p.lastNames,p.nameOnShirt,p.position,p.club,p.dob,p.heightCm,p.playerPowerPercent,p.playerPowerBase,p.currentPlayerPower);
+    if(p.rating) parts.push(p.rating.basePlayerPower,p.rating.currentPlayerPower,p.rating.source,p.rating.status);
+  });
+  return parts.filter(v=>v!==undefined&&v!==null).join(' ');
+}
+function matchSearchBlob(m){
+  const stadium=stadiumDataForMatch(m);
+  const parts=[
+    m.id, `${m.id}. mérkőzés`, m.date, dateLabel(m.date), m.timeET, m.timeLocal,
+    m.teamA,m.teamB,tTeam(m.teamA),tTeam(m.teamB),
+    m.group, tGroup(m.group), m.stage, tStage(m.stage),
+    m.venue,m.city,m.status,tStatus(m.status),m.score,
+    teamSearchBlob(m.teamA), teamSearchBlob(m.teamB)
+  ];
+  if(stadium){
+    parts.push(stadium.name,stadium.city,stadium.country,stadium.capacity,stadium.altitude,stadium.opened,stadium.primaryUse,stadium.surface,stadium.matches,stadium.role,stadium.story,stadium.credit);
+  }
+  return normalizeSearchText(parts.filter(v=>v!==undefined&&v!==null).join(' '));
+}
+function matchesGlobalQuery(m,q){
+  if(!q) return true;
+  const terms=normalizeSearchText(q).split(' ').filter(Boolean);
+  if(!terms.length) return true;
+  const blob=matchSearchBlob(m);
+  return terms.every(term=>blob.includes(term));
+}
+function render(){
+  let q=search.value.trim(), st=stageSel.value, gr=groupSel.value;
+  let filtered=matches.filter(m=>(!st||m.stage===st)&&(!gr||m.group===gr)&&matchesGlobalQuery(m,q));
+  let by={};
+  filtered.forEach(m=>(by[m.date]??=[]).push(m));
+  calendar.innerHTML=Object.keys(by).sort().map(d=>`<h2 class="day">${dateLabel(d)}</h2><div class="grid">${by[d].sort((a,b)=>magyarRendezoKulcs(a)-magyarRendezoKulcs(b)).map(card).join('')}</div>`).join('')||'<div class="empty">Nincs találat.</div>';
+  document.querySelectorAll('.match').forEach(el=>el.onclick=()=>openMatch(matches.find(m=>m.id==el.dataset.id)));
+}
 function card(m){let tag=m.group?`<span class="groupTag">${m.group} csoport</span>`:`<span class="ko">${esc(tStage(m.stage))}</span>`;const ctx=m.group?groups[m.group]:[m.teamA,m.teamB];return `<article class="match" data-id="${m.id}"><div class="top"><span class="badge">${m.id}. mérkőzés</span><span class="stage">${esc(tStage(m.stage))}</span></div><div class="teams">${teamAura(m.teamA,ctx)}<br>–<br>${teamAura(m.teamB,ctx)}</div><div class="meta">${tag}<br>${idoFelirat(m)}<br>${esc(m.venue)} · ${esc(m.city)}</div></article>`;}
 function openMatch(m){
   modalStack=[];
@@ -2601,7 +2668,13 @@ function saveMatchJson(id){
   openMatch(m);
   document.getElementById('savedNote').textContent='JSON-kapu állapota mentve. A tényleges statisztikai adatforrás később kapcsolódik ide.';
 }
-[search,stageSel,groupSel].forEach(el=>el.addEventListener('input',render));document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';groupSel.value='';render();};document.getElementById('jumpGroups').onclick=()=>document.getElementById('groupCalendarIntro').scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('jumpBracket').onclick=()=>document.getElementById('knockoutBracket').scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('exportState').onclick=exportWorldCupState;document.getElementById('clearSavedState').onclick=clearSavedWorldCupState;init();
+search.addEventListener('input',render);
+search.addEventListener('keyup',render);
+stageSel.addEventListener('input',render);
+stageSel.addEventListener('change',render);
+groupSel.addEventListener('input',render);
+groupSel.addEventListener('change',render);
+document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';groupSel.value='';render();};document.getElementById('jumpGroups').onclick=()=>document.getElementById('groupCalendarIntro').scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('jumpBracket').onclick=()=>document.getElementById('knockoutBracket').scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('exportState').onclick=exportWorldCupState;document.getElementById('clearSavedState').onclick=clearSavedWorldCupState;init();
 </script>
 
 <div id="teamQuickMenu" class="teamQuickMenu" aria-hidden="true">
@@ -2676,6 +2749,130 @@ function saveMatchJson(id){
   }
 
   window.addEventListener('scroll', function(){ if(menu) menu.classList.remove('open'); }, true);
+})();
+</script>
+
+
+<script id="v69-live-search-script">
+(function(){
+  function normV69(v){
+    try{return normalizeSearchText(v);}catch(e){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
+  }
+  function uniq(arr){return [...new Set(arr.filter(Boolean))];}
+  function escV69(v){try{return esc(v);}catch(e){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}}
+  let searchIndex=[];
+  function buildSearchIndexV69(){
+    const items=[];
+    const allTeams=uniq(Object.values(groups||{}).flat());
+    allTeams.forEach(team=>{
+      const group=Object.keys(groups||{}).find(g=>(groups[g]||[]).includes(team))||'';
+      const data=(typeof DEFAULT_TEAM_DATA!=='undefined' && DEFAULT_TEAM_DATA.teams)?DEFAULT_TEAM_DATA.teams[team]:null;
+      const coach=data&&data.coach?data.coach:null;
+      items.push({type:'Csapat',title:team,sub:group?`${group} csoport`:'',value:team,blob:[team,group,data?.teamCode,coach?.name,coach?.nationality].join(' '),power:''});
+      if(coach&&coach.name){items.push({type:'Edző',title:coach.name,sub:team,value:coach.name,blob:[coach.name,coach.firstNames,coach.lastNames,coach.nationality,team,group].join(' '),power:''});}
+      (data?.players||[]).forEach(p=>{
+        const power=(p.currentPlayerPower??p.playerPowerBase??p.playerPowerPercent??p.rating?.currentPlayerPower??p.rating?.basePlayerPower);
+        items.push({type:'Játékos',title:p.name||p.nameOnShirt||'',sub:`${team}${p.position?' · '+p.position:''}${p.club?' · '+p.club:''}`,value:p.name||p.nameOnShirt||'',blob:[p.name,p.nameOnShirt,p.firstNames,p.lastNames,p.position,p.club,team,group,p.dob,p.heightCm,power].join(' '),power:Number.isFinite(Number(power))?`${Math.round(Number(power))}/99`:''});
+      });
+    });
+    if(typeof STADIUMS!=='undefined'){
+      Object.values(STADIUMS).forEach(s=>{
+        items.push({type:'Stadion',title:s.name,sub:`${s.city} · ${s.country}`,value:s.name,blob:[s.name,s.city,s.country,s.capacity,s.altitude,s.opened,s.primaryUse,s.surface,s.matches,s.role,s.story].join(' '),power:''});
+        items.push({type:'Város',title:s.city,sub:`${s.name} · ${s.country}`,value:s.city,blob:[s.city,s.name,s.country].join(' '),power:''});
+      });
+    }
+    Object.keys(groups||{}).forEach(g=>items.push({type:'Csoport',title:`${g} csoport`,sub:(groups[g]||[]).join(' · '),value:g,blob:[g,'csoport',...(groups[g]||[])].join(' '),power:''}));
+    try{uniq(matches.map(m=>m.stage)).forEach(s=>items.push({type:'Szakasz',title:tStage(s),sub:'Torna-szűrő',value:tStage(s),blob:[s,tStage(s)].join(' '),power:''}));}catch(e){}
+    searchIndex=items.map((it,i)=>({...it,id:i,norm:normV69([it.type,it.title,it.sub,it.blob].join(' '))}));
+  }
+  function ensureSearchUiV69(){
+    const input=document.getElementById('search');
+    if(!input) return null;
+    if(!document.getElementById('liveSearchResults')){
+      const wrap=document.createElement('div');
+      wrap.className='searchBoxV69';
+      input.parentNode.insertBefore(wrap,input);
+      wrap.appendChild(input);
+      const box=document.createElement('div');
+      box.id='liveSearchResults';
+      box.className='liveSearchResults';
+      wrap.appendChild(box);
+      const info=document.createElement('div');
+      info.id='searchResultLine';
+      info.className='searchResultLine';
+      const intro=document.getElementById('groupCalendarIntro');
+      if(intro) intro.insertAdjacentElement('afterend',info);
+    }
+    return document.getElementById('liveSearchResults');
+  }
+  function filteredMatchesV69(){
+    const q=(document.getElementById('search')?.value||'').trim();
+    const st=document.getElementById('stage')?.value||'';
+    const gr=document.getElementById('group')?.value||'';
+    return matches.filter(m=>(!st||m.stage===st)&&(!gr||m.group===gr)&&matchesGlobalQuery(m,q));
+  }
+  function renderLiveSuggestionsV69(){
+    const box=ensureSearchUiV69(); if(!box) return;
+    const q=(document.getElementById('search')?.value||'').trim();
+    if(!q){box.classList.remove('open');box.innerHTML='';return;}
+    const terms=normV69(q).split(' ').filter(Boolean);
+    const results=searchIndex.filter(it=>terms.every(t=>it.norm.includes(t)))
+      .sort((a,b)=>{
+        const pa={Csapat:0,Játékos:1,Stadion:2,Város:3,Edző:4,Csoport:5,Szakasz:6};
+        const ax=a.norm.startsWith(normV69(q))?-1:0, bx=b.norm.startsWith(normV69(q))?-1:0;
+        return ax-bx || (pa[a.type]??9)-(pa[b.type]??9) || a.title.localeCompare(b.title,'hu');
+      }).slice(0,14);
+    if(!results.length){box.classList.add('open');box.innerHTML='<div class="liveSearchItem"><span class="liveSearchTitle">Nincs közvetlen ajánlat</span><span class="liveSearchSub">A meccskártyák lent akkor is szűrődnek, ha van találat.</span></div>';return;}
+    box.classList.add('open');
+    box.innerHTML=results.map(r=>`<button type="button" class="liveSearchItem" data-id="${r.id}"><span class="liveSearchType">${escV69(r.type)}</span><span><span class="liveSearchTitle">${escV69(r.title)}</span><span class="liveSearchSub">${escV69(r.sub||'')}</span></span><span class="liveSearchPower">${escV69(r.power||'')}</span></button>`).join('');
+    box.querySelectorAll('.liveSearchItem[data-id]').forEach(btn=>btn.addEventListener('click',()=>{
+      const item=searchIndex.find(x=>String(x.id)===btn.dataset.id); if(!item) return;
+      const input=document.getElementById('search'); input.value=item.value||item.title;
+      box.classList.remove('open');
+      applySearchV69(true);
+    }));
+  }
+  function applySearchV69(scrollToResults){
+    const input=document.getElementById('search'), stageSel=document.getElementById('stage'), groupSel=document.getElementById('group');
+    const q=(input?.value||'').trim(), st=stageSel?.value||'', gr=groupSel?.value||'';
+    const active=!!(q||st||gr);
+    document.body.classList.toggle('searchModeActive',active);
+    const filtered=filteredMatchesV69();
+    const by={}; filtered.forEach(m=>(by[m.date]??=[]).push(m));
+    const cal=document.getElementById('calendar');
+    if(cal){
+      cal.innerHTML=Object.keys(by).sort().map(d=>`<h2 class="day">${dateLabel(d)}</h2><div class="grid">${by[d].sort((a,b)=>magyarRendezoKulcs(a)-magyarRendezoKulcs(b)).map(card).join('')}</div>`).join('')||'<div class="empty">Nincs találat.</div>';
+      cal.querySelectorAll('.match').forEach(el=>el.onclick=()=>openMatch(matches.find(m=>m.id==el.dataset.id)));
+    }
+    const teams=uniq(filtered.flatMap(m=>[m.teamA,m.teamB]));
+    const groupsFound=uniq(filtered.map(m=>m.group).filter(Boolean));
+    const venues=uniq(filtered.map(m=>`${m.venue} · ${m.city}`));
+    const stats=document.getElementById('stats');
+    if(stats){stats.innerHTML=`<div class="stat"><b>${filtered.length}</b><span>találati mérkőzés</span></div><div class="stat"><b>${teams.length}</b><span>érintett csapat</span></div><div class="stat"><b>${groupsFound.length}</b><span>érintett csoport</span></div><div class="stat"><b>${venues.length}</b><span>érintett helyszín</span></div>`;}
+    const intro=document.getElementById('groupCalendarIntro');
+    if(intro){
+      const h=intro.querySelector('h2'); const p=intro.querySelector('p:not(.eyebrow)'); const e=intro.querySelector('.eyebrow');
+      if(active){ if(e)e.textContent='Keresési találatok'; if(h)h.textContent='Élő találati nézet'; if(p)p.textContent='A kereső és a szűrők együtt működnek. A kártyák azonnal a beírt szöveghez igazodnak.'; }
+      else { if(e)e.textContent='Csoportkör'; if(h)h.textContent='Teljes meccsnaptár'; if(p)p.textContent='Itt vannak magyar idő szerinti időrendben a csoportmeccsek és a teljes torna mérkőzései. A kártyák kattinthatók, később innen nyílik majd a csapat- és játékosadatlap is.'; }
+    }
+    const line=document.getElementById('searchResultLine');
+    if(line){ line.textContent=active ? `${filtered.length} meccstalálat · ${teams.length} csapat · ${venues.length} helyszín` : ''; }
+    renderLiveSuggestionsV69();
+    if(scrollToResults && intro){intro.scrollIntoView({behavior:'smooth',block:'start'});}
+  }
+  window.applySearchV69=applySearchV69;
+  function bootV69(){
+    ensureSearchUiV69(); buildSearchIndexV69();
+    const input=document.getElementById('search'), stage=document.getElementById('stage'), group=document.getElementById('group'), reset=document.getElementById('reset');
+    if(input){input.addEventListener('input',()=>applySearchV69(false));input.addEventListener('keyup',()=>applySearchV69(false));input.addEventListener('focus',renderLiveSuggestionsV69);}
+    if(stage){stage.addEventListener('change',()=>applySearchV69(false));stage.addEventListener('input',()=>applySearchV69(false));}
+    if(group){group.addEventListener('change',()=>applySearchV69(false));group.addEventListener('input',()=>applySearchV69(false));}
+    if(reset){reset.onclick=()=>{if(input)input.value=''; if(stage)stage.value=''; if(group)group.value=''; document.getElementById('liveSearchResults')?.classList.remove('open'); document.body.classList.remove('searchModeActive'); try{renderStandings();renderBracket();}catch(e){} applySearchV69(false);};}
+    document.addEventListener('click',e=>{const wrap=e.target.closest?.('.searchBoxV69'); if(!wrap) document.getElementById('liveSearchResults')?.classList.remove('open');});
+    try{render=applySearchV69;}catch(e){}
+    applySearchV69(false);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootV69); else bootV69();
 })();
 </script>
 
