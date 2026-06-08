@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FIFA World Cup 2026 – Interaktív naptár v64</title>
+  <title>FIFA World Cup 2026 – Interaktív naptár v79.4</title>
   <style>
     :root{--bg:#07111f;--panel:#0e1d33;--panel2:#132742;--text:#eef5ff;--muted:#9eb0c8;--accent:#77d6ff;--line:#28435f;--gold:#ffd166;--green:#6ee7b7;--red:#fca5a5;--i18n-marker:#ff4fd8/* fordítási szövegjelölő: csak látható szövegekhez, máshol nem használjuk */}
     *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top,#132b4d,#07111f 55%,#03070d);color:var(--text)}
@@ -242,8 +242,8 @@ table.standingTable{
   text-overflow:ellipsis !important;
 }
 .qualLegend{padding:9px 12px !important;font-size:10.5px !important;gap:7px !important;}
-@media (max-width:1500px){#groups.groups{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}}
-@media (max-width:1080px){#groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
+@media(max-width:1500px){#groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
+@media(max-width:920px){#groups.groups{grid-template-columns:1fr !important;}}
 @media (max-width:720px){#groups.groups{grid-template-columns:1fr !important;} .groupHead span{display:none !important;}}
 
 
@@ -1534,12 +1534,8 @@ table.standingTable{
 #knockoutBracket .cleanTrophy,#knockoutBracket .realTrophy,#knockoutBracket .trophySvg,#knockoutBracket .trophy{display:none !important;}
 #knockoutBracket,#knockoutBracket.bracketWrap,#knockoutBracket .bracket,#knockoutBracket .brCol{overflow:visible !important;}
 
-@media(max-width:1500px){
-  #groups.groups{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
-}
-@media(max-width:1080px){
-  #groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
-}
+@media(max-width:1500px){#groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
+@media(max-width:920px){#groups.groups{grid-template-columns:1fr !important;}}
 @media(max-width:720px){
   #groups.groups{grid-template-columns:1fr !important;}
   .standingTable th:nth-child(2),.standingTable td:nth-child(2){width:165px !important;}
@@ -1626,8 +1622,8 @@ table.standingTable{
 }
 #knockoutBracket .cleanTrophy,#knockoutBracket .realTrophy,#knockoutBracket .trophySvg,#knockoutBracket .trophy{display:none !important;}
 
-@media(max-width:1500px){#groups.groups{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}.standingTable .teamAura .auraName{font-size:13px !important;}}
-@media(max-width:1080px){#groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
+@media(max-width:1500px){#groups.groups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
+@media(max-width:920px){#groups.groups{grid-template-columns:1fr !important;}}
 @media(max-width:720px){#groups.groups{grid-template-columns:1fr !important;}.standingTable th:nth-child(2),.standingTable td:nth-child(2){width:182px !important;min-width:182px !important;max-width:182px !important;}}
 
 
@@ -2174,6 +2170,252 @@ table.standingTable{
   .trendSample b:after{animation:none !important;opacity:0 !important;}
 }
 
+
+
+/* v72.1 PATCH — Formaáram diagnosztizált javítása CSAK a magyarázó panelen
+   Ok: a korábbi left/right !important lefogta a keyframes left/right animációt.
+   Megoldás: a fénycsík fix pozíció helyett transform:translateX() mozgást kap. */
+.trendSample.trendUp b:after,
+.trendSample.trendDown b:after{
+  content:"" !important;
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:0 !important;
+  right:auto !important;
+  width:34% !important;
+  border-radius:999px !important;
+  display:block !important;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.10) 24%,
+    rgba(255,255,255,.62) 50%,
+    rgba(255,255,255,.10) 76%,
+    rgba(255,255,255,0) 100%) !important;
+  opacity:.82 !important;
+  will-change:transform !important;
+}
+.trendSample.trendUp b:after{
+  animation:formaLegendFlowRight 2.3s linear infinite !important;
+}
+.trendSample.trendDown b:after{
+  animation:formaLegendFlowLeft 2.3s linear infinite !important;
+}
+@keyframes formaLegendFlowRight{
+  from{transform:translateX(-120%);}
+  to{transform:translateX(330%);}
+}
+@keyframes formaLegendFlowLeft{
+  from{transform:translateX(330%);}
+  to{transform:translateX(-120%);}
+}
+@media (prefers-reduced-motion: reduce){
+  .trendSample.trendUp b:after,
+  .trendSample.trendDown b:after{
+    animation:formaLegendFlowRight 2.3s linear infinite !important;
+    opacity:.82 !important;
+  }
+  .trendSample.trendDown b:after{animation-name:formaLegendFlowLeft !important;}
+}
+
+
+/* v72.2 PATCH — Formaáram 0.5x sebesség + ugyanaz a működő transform-alapú mechanika a játékosvonalakon is.
+   Csak a Formaáram animációt érinti; layout/dizájn nincs átírva. */
+.playerPowerLine.trendUp .playerPowerFill:after,
+.playerPowerLine.trendDown .playerPowerFill:after{
+  content:"" !important;
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:0 !important;
+  right:auto !important;
+  width:34% !important;
+  border-radius:999px !important;
+  display:block !important;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.10) 24%,
+    rgba(255,255,255,.62) 50%,
+    rgba(255,255,255,.10) 76%,
+    rgba(255,255,255,0) 100%) !important;
+  opacity:.82 !important;
+  animation:formaPlayerFlowRight 2.3s linear infinite !important;
+  will-change:transform !important;
+}
+.playerPowerLine.trendUp .playerPowerFill:after{
+  animation-name:formaPlayerFlowRight !important;
+}
+.playerPowerLine.trendDown .playerPowerFill:after{
+  animation-name:formaPlayerFlowLeft !important;
+}
+@keyframes formaPlayerFlowRight{
+  from{transform:translateX(-120%);}
+  to{transform:translateX(330%);}
+}
+@keyframes formaPlayerFlowLeft{
+  from{transform:translateX(330%);}
+  to{transform:translateX(-120%);}
+}
+@media (prefers-reduced-motion: reduce){
+  .playerPowerLine.trendUp .playerPowerFill:after,
+  .playerPowerLine.trendDown .playerPowerFill:after{
+    animation:formaPlayerFlowRight 2.3s linear infinite !important;
+    opacity:.82 !important;
+  }
+  .playerPowerLine.trendDown .playerPowerFill:after{animation-name:formaPlayerFlowLeft !important;}
+}
+
+
+/* v75 Final Stage Visual Pass: csak a meccsnaptár Bronzmérkőzés és Döntő kártyái */
+#calendar .match.bronzeMatch{
+  border-color:rgba(190,118,55,.62) !important;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(190,118,55,.22),transparent 34%),
+    linear-gradient(160deg,rgba(42,35,31,.96),rgba(10,23,38,.96)) !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.30),0 0 0 1px rgba(190,118,55,.12),0 0 22px rgba(190,118,55,.16) !important;
+}
+#calendar .match.bronzeMatch:before{
+  background:radial-gradient(circle,rgba(190,118,55,.24),transparent 64%) !important;
+}
+#calendar .match.bronzeMatch .stage,
+#calendar .match.bronzeMatch .ko{
+  color:#e2a46c !important;
+}
+#calendar .match.finalMatch{
+  width:450px !important;
+  max-width:450px !important;
+  flex:0 1 450px !important;
+  min-height:225px !important;
+  padding:22px 20px !important;
+  border-color:rgba(255,209,102,.72) !important;
+  background:
+    radial-gradient(circle at 50% 8%,rgba(255,209,102,.22),transparent 35%),
+    radial-gradient(circle at 82% 78%,rgba(255,209,102,.13),transparent 36%),
+    linear-gradient(160deg,rgba(55,48,27,.96),rgba(8,22,38,.96)) !important;
+  box-shadow:0 20px 48px rgba(0,0,0,.38),0 0 0 1px rgba(255,209,102,.14),0 0 30px rgba(255,209,102,.22) !important;
+}
+#calendar .match.finalMatch:before{
+  inset:-24% -10% auto auto !important;
+  width:190px !important;
+  height:190px !important;
+  background:radial-gradient(circle,rgba(255,209,102,.26),transparent 66%) !important;
+}
+#calendar .match.finalMatch .badge{
+  box-shadow:0 0 18px rgba(255,209,102,.24) !important;
+}
+#calendar .match.finalMatch .stage,
+#calendar .match.finalMatch .ko{
+  color:var(--gold) !important;
+}
+#calendar .match.finalMatch .teams{
+  gap:10px !important;
+}
+#calendar .match.finalMatch .meta{
+  font-size:14px !important;
+  line-height:1.55 !important;
+}
+#calendar .match.finalMatch:hover,
+#calendar .match.bronzeMatch:hover{
+  transform:translateY(-4px) scale(1.005) !important;
+}
+@media(max-width:700px){
+  #calendar .match.finalMatch,
+  #calendar .match.bronzeMatch{
+    width:100% !important;
+    max-width:420px !important;
+    flex-basis:100% !important;
+  }
+  #calendar .match.finalMatch{
+    min-height:205px !important;
+  }
+}
+
+
+/* v76 Darker Bronze Pass: bronz mélyítése a naptárban és a kieséses panelen */
+#calendar .match.bronzeMatch{
+  border-color:rgba(150,78,34,.66) !important;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(135,70,30,.16),transparent 34%),
+    radial-gradient(circle at 82% 78%,rgba(95,48,24,.10),transparent 38%),
+    linear-gradient(160deg,rgba(28,23,22,.98),rgba(8,21,36,.97)) !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 0 1px rgba(145,78,36,.10),0 0 16px rgba(130,66,30,.12) !important;
+}
+#calendar .match.bronzeMatch:before{
+  background:radial-gradient(circle,rgba(125,64,30,.16),transparent 66%) !important;
+}
+#calendar .match.bronzeMatch .stage,
+#calendar .match.bronzeMatch .ko{
+  color:#c78655 !important;
+}
+
+#knockoutBracket .brCard.brGhost{
+  opacity:1 !important;
+  border-color:rgba(150,78,34,.68) !important;
+  background:
+    radial-gradient(circle at 50% 8%,rgba(125,64,30,.13),transparent 36%),
+    linear-gradient(180deg,rgba(30,23,21,.96),rgba(8,19,32,.96)) !important;
+  box-shadow:0 12px 26px rgba(0,0,0,.34),0 0 0 1px rgba(140,72,34,.12),0 0 16px rgba(125,64,30,.14) !important;
+}
+#knockoutBracket .brCard.brGhost .brTeams{
+  color:#fff !important;
+}
+#knockoutBracket .brCard.brGhost .brMeta{
+  color:#d0b097 !important;
+}
+#knockoutBracket .brCard.brGhost .brNo{
+  background:linear-gradient(90deg,#d69a5f,#b86c32) !important;
+  color:#07111f !important;
+}
+#knockoutBracket .roundLabel[style*="11 / 5"]{
+  color:#c78655 !important;
+  text-shadow:0 0 12px rgba(130,66,30,.26) !important;
+}
+
+  
+
+.standingTable td.team .slotLockCheck{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:14px;
+  margin-right:4px;
+  color:#ffd166;
+  font-weight:1000;
+  text-shadow:0 0 8px rgba(255,209,102,.55);
+  vertical-align:middle;
+  visibility:hidden;
+}
+.standingTable td.team.lockedSlotTeam .slotLockCheck{
+  visibility:visible;
+}
+.standingTable td.team.lockedSlotTeam .teamAura .auraName{
+  color:#ffd166;
+  text-shadow:0 0 8px rgba(255,209,102,.28);
+}
+
+
+
+/* v79.4b: naptárkártyán belül a csapatnév már nem viselkedik külön interaktív elemként */
+#calendar .match .teamAura,
+#calendar .match .teamAura *,
+#calendar .match .teamAuraName,
+#calendar .match .team-aura,
+#calendar .match .team-name-aura,
+#calendar .match .auraName,
+#calendar .match .teamPill,
+#calendar .match .teamPowerName{
+  cursor:default !important;
+  pointer-events:none !important;
+}
+#calendar .match .teamAuraName:hover,
+#calendar .match .team-aura:hover,
+#calendar .match .team-name-aura:hover,
+#calendar .match .auraName:hover,
+#calendar .match .teamPill:hover,
+#calendar .match .teamPowerName:hover{
+  transform:none !important;
+  filter:none !important;
+}
 </style>
 
 <style id="v69-live-search-style">
@@ -2197,7 +2439,7 @@ table.standingTable{
 </head>
 <body>
 <header>
-  <h1>FIFA World Cup 2026 – Interaktív naptár <span>v72</span></h1>
+  <h1>FIFA World Cup 2026 – Interaktív naptár <span>v79.4b</span></h1>
   <p class="lead">Teljes csoportmeccs-kalendár, helyszínek, időpontok és kattintható meccskártyák. A csoportkör után látványos kieséses szakasz mutatja az utat a döntőig, később pedig minden meccshez játékoskeretek és statisztikák kapcsolhatók.</p>
   <div class="topControlDeck">
     <section class="controlGroup searchFilterGroup" aria-label="Keresés és szűrés">
@@ -2265,6 +2507,7 @@ table.standingTable{
 
 <dialog id="details"><button class="close" onclick="handleDetailsCloseButton()">Bezár</button><div id="modalContent"></div></dialog>
 <script>
+/* v79.4 bugfix: a naptár-meccskártyákon a csapatnév nem külön kattintható; csak a teljes kártya nyitja a meccsmodalt. */
 const groups={A:['Mexico','South Africa','Korea Republic','Czechia'],B:['Canada','Switzerland','Qatar','Bosnia and Herzegovina'],C:['Brazil','Morocco','Haiti','Scotland'],D:['United States','Paraguay','Australia','Türkiye'],E:['Germany','Curaçao','Côte d’Ivoire','Ecuador'],F:['Netherlands','Japan','Tunisia','Sweden'],G:['Belgium','Egypt','Iran','New Zealand'],H:['Spain','Cabo Verde','Saudi Arabia','Uruguay'],I:['France','Senegal','Norway','Iraq'],J:['Argentina','Algeria','Austria','Jordan'],K:['Portugal','Uzbekistan','Colombia','Congo DR'],L:['England','Croatia','Ghana','Panama']};
 
 /* I18N-MARKER #ff4fd8
@@ -2445,16 +2688,35 @@ function teamStaminaText(team){
   if(d<0) return `hanyatló forma: ${d}`;
   return 'változatlan forma';
 }
-function teamAura(team, contextTeams){
-  const name=esc(tTeam(team));
-  const data=getTeamData(team);
-  const rel=relativePowerPercent(team, contextTeams);
-  const activeClass=data?' teamInteractive':'';
-  const staminaClass=teamStaminaClass(team);
-  const click=data?` onclick="event.stopPropagation();openTeamPanel('${escAttr(team)}')"`:'';
+function resolveSlotTeamKey(team){
+  const raw=String(team||'');
+  const winnerMatch=raw.match(/^Group ([A-L]) Winner$/);
+  if(winnerMatch && typeof getLockedSlot==='function'){
+    return getLockedSlot(`${winnerMatch[1]}1`) || team;
+  }
+  const runnerMatch=raw.match(/^Group ([A-L]) Runner-Up$/);
+  if(runnerMatch && typeof getLockedSlot==='function'){
+    return getLockedSlot(`${runnerMatch[1]}2`) || team;
+  }
+  return team;
+}
+function resolvedAuraContext(contextTeams, teamKey){
+  let ctx=(contextTeams&&contextTeams.length)?contextTeams.map(resolveSlotTeamKey):null;
+  const valid=ctx?ctx.map(currentPowerPercent).filter(v=>typeof v==='number').length:0;
+  if(valid>=2) return ctx;
+  return contextTeamsFor(teamKey) || ctx;
+}
+function teamAura(team, contextTeams, clickable=true){
+  const teamKey=resolveSlotTeamKey(team);
+  const name=esc(tTeam(teamKey));
+  const data=getTeamData(teamKey);
+  const ctx=resolvedAuraContext(contextTeams, teamKey);
+  const rel=relativePowerPercent(teamKey, ctx);
+  const activeClass=(data && clickable)?' teamInteractive':'';
+  const staminaClass=teamStaminaClass(teamKey);
+  const click=(data && clickable)?` onclick="event.stopPropagation();openTeamPanel('${escAttr(teamKey)}')"`:'';
   if(typeof rel!=='number') return `<span class="teamAura neutral ${staminaClass}${activeClass}"${click}><span class="auraName">${name}</span></span>`;
-  const raw=currentPowerPercent(team);
-  return `<span class="teamAura ${staminaClass}${activeClass}" style="${auraVars(team, contextTeams)}" title="Kezdő Elo: ${TEAM_ELO[team]} · Pillanatnyi relatív ráta: ${rel}/100 · ${teamStaminaText(team)}"${click}><span class="auraName">${name}</span><span class="auraRateTrack" aria-hidden="true"><span class="auraRateFill"></span></span></span>`;
+  return `<span class="teamAura ${staminaClass}${activeClass}" style="${auraVars(teamKey, ctx)}" title="Kezdő Elo: ${TEAM_ELO[teamKey]} · Pillanatnyi relatív ráta: ${rel}/100 · ${teamStaminaText(teamKey)}"${click}><span class="auraName">${name}</span><span class="auraRateTrack" aria-hidden="true"><span class="auraRateFill"></span></span></span>`;
 }
 function groupPowerOrder(g){
   return [...groups[g]].sort((a,b)=>relativePowerPercent(b,groups[g])-relativePowerPercent(a,groups[g]) || tTeam(a).localeCompare(tTeam(b),'hu'));
@@ -2464,9 +2726,24 @@ function tStage(s){return STAGE_HU[s]||s;}
 function tStatus(s){return STATUS_HU[s]||s;}
 function tTeam(s){
   if(TEAM_HU[s]) return TEAM_HU[s];
-  return String(s)
-    .replace(/Group ([A-L]) Winner/g,'$1 csoport győztese')
-    .replace(/Group ([A-L]) Runner-Up/g,'$1 csoport 2. helyezettje')
+  const raw=String(s);
+
+  // v78: Slot Lock → naptárhelyettesítés
+  // Ha egy csoporthelyezés matematikailag már fix, akkor a kieséses naptár
+  // placeholder szövege helyett azonnal a konkrét csapatnév jelenik meg.
+  // Fontos: csak konkrét slotot cserélünk (A1/A2), sima továbbjutást nem.
+  const winnerMatch = raw.match(/^Group ([A-L]) Winner$/);
+  if(winnerMatch){
+    const locked = (typeof getLockedSlot === 'function') ? getLockedSlot(`${winnerMatch[1]}1`) : null;
+    return locked ? tTeam(locked) : `${winnerMatch[1]} csoport győztese`;
+  }
+  const runnerMatch = raw.match(/^Group ([A-L]) Runner-Up$/);
+  if(runnerMatch){
+    const locked = (typeof getLockedSlot === 'function') ? getLockedSlot(`${runnerMatch[1]}2`) : null;
+    return locked ? tTeam(locked) : `${runnerMatch[1]} csoport 2. helyezettje`;
+  }
+
+  return raw
     .replace(/Group ([A-L](?:\/[A-L])*) 3rd Place/g,'$1 csoport 3. helyezettje')
     .replace(/Match (\d+) Winner/g,'$1. mérkőzés győztese')
     .replace(/Match (\d+) Loser/g,'$1. mérkőzés vesztese');
@@ -2892,9 +3169,80 @@ function computeStandings(){
   Object.entries(table).forEach(([g,rows])=>rows.sort((x,y)=>y.PTS-x.PTS||y.GD-x.GD||y.GF-x.GF||relativePowerPercent(y.team,groups[g])-relativePowerPercent(x.team,groups[g])||tTeam(x.team).localeCompare(tTeam(y.team),'hu')));
   return table;
 }
+
+
+/* v77 Slot Lock Engine alap
+   Cél: csak akkor rögzítünk konkrét slotot (A1/A2 stb.), ha a csapat helyezése
+   matematikailag már nem változhat. Ez még belső motor: naptárhelyettesítés és
+   tabella-jelölés a következő lépcsőben jön rá. */
+let lockedSlots = {};
+
+function hasFinalScore(m){
+  return m && m.score !== null && m.score !== undefined && /^\d+[-–:]\d+$/.test(String(m.score));
+}
+
+function emptyLockedSlots(){
+  const out={};
+  Object.keys(groups).forEach(g=>{ out[`${g}1`]=null; out[`${g}2`]=null; });
+  return out;
+}
+
+function groupRemainingMatches(groupCode){
+  return matches.filter(m=>m.stage==='Group Stage' && m.group===groupCode && !hasFinalScore(m));
+}
+
+function groupMaxPoints(groupCode, rows){
+  const max={};
+  rows.forEach(r=>max[r.team]=r.PTS);
+  groupRemainingMatches(groupCode).forEach(m=>{
+    if(max[m.teamA] !== undefined) max[m.teamA]+=3;
+    if(max[m.teamB] !== undefined) max[m.teamB]+=3;
+  });
+  return max;
+}
+
+function calculateSlotLocks(){
+  const table=computeStandings();
+  const locks=emptyLockedSlots();
+
+  Object.entries(table).forEach(([g,rows])=>{
+    if(!rows || rows.length<2) return;
+    const maxPts=groupMaxPoints(g,rows);
+    const first=rows[0];
+    const second=rows[1];
+
+    // G1: akkor fix, ha az első aktuális pontszámát már senki sem érheti el.
+    // A szigorú > tudatos: pontegyenlőségnél még tie-breaker dönthet, ezért nem zárunk korán.
+    const firstLocked = rows.slice(1).every(r=>first.PTS > maxPts[r.team]);
+    if(firstLocked) locks[`${g}1`]=first.team;
+
+    // G2: csak akkor fix, ha G1 már fix, és a második helyezettet már senki
+    // más nem érheti utol / előzheti meg a még hátralévő meccsekből.
+    if(firstLocked && second && second.team !== first.team){
+      const secondLocked = rows
+        .filter(r=>r.team!==first.team && r.team!==second.team)
+        .every(r=>second.PTS > maxPts[r.team]);
+      if(secondLocked) locks[`${g}2`]=second.team;
+    }
+  });
+
+  lockedSlots=locks;
+  window.lockedSlots=lockedSlots;
+  return lockedSlots;
+}
+
+function getLockedSlot(slot){
+  if(!lockedSlots || !Object.keys(lockedSlots).length) calculateSlotLocks();
+  return lockedSlots[slot] || null;
+}
+
+window.calculateSlotLocks=calculateSlotLocks;
+window.getLockedSlot=getLockedSlot;
 function renderStandings(){
   const table=computeStandings();
-  document.getElementById('groups').innerHTML=Object.entries(table).map(([g,rows])=>`<div class="group standings"><div class="groupHead"><h3>${g} csoport</h3><span>4 csapat · 6 mérkőzés</span></div><div class="tableWrap"><table class="standingTable"><thead><tr><th>#</th><th>Csapat</th><th>M</th><th>GY</th><th>D</th><th>V</th><th>RG</th><th>KG</th><th>GK</th><th>P</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td class="pos">${i+1}</td><td class="team">${teamAura(r.team,groups[g])}</td><td>${r.P}</td><td>${r.W}</td><td>${r.D}</td><td>${r.L}</td><td>${r.GF}</td><td>${r.GA}</td><td>${r.GD}</td><td><b>${r.PTS}</b></td></tr>`).join('')}</tbody></table></div><div class="qualLegend qualLegendV72"><span><i class="dot"></i>1–2. hely: biztos továbbjutás</span><span><i class="dot third"></i>3. hely: esély a legjobb harmadikak között</span></div></div>`).join('');
+  calculateSlotLocks();
+  const lockedTeamSet = new Set(Object.values(lockedSlots || {}).filter(Boolean));
+  document.getElementById('groups').innerHTML=Object.entries(table).map(([g,rows])=>`<div class="group standings"><div class="groupHead"><h3>${g} csoport</h3><span>4 csapat · 3 mérkőzés/csapat</span></div><div class="tableWrap"><table class="standingTable"><thead><tr><th>#</th><th>Csapat</th><th>M</th><th>GY</th><th>D</th><th>V</th><th>RG</th><th>KG</th><th>GK</th><th>P</th></tr></thead><tbody>${rows.map((r,i)=>{const isLocked=lockedTeamSet.has(r.team);return `<tr><td class="pos">${i+1}</td><td class="team${isLocked?' lockedSlotTeam':''}"><span class="slotLockCheck">✓</span>${teamAura(r.team,groups[g])}</td><td>${r.P}</td><td>${r.W}</td><td>${r.D}</td><td>${r.L}</td><td>${r.GF}</td><td>${r.GA}</td><td>${r.GD}</td><td><b>${r.PTS}</b></td></tr>`}).join('')}</tbody></table></div><div class="qualLegend qualLegendV72"><span><i class="dot"></i>1–2. hely: biztos továbbjutás</span><span><i class="dot third"></i>3. hely: esély a legjobb harmadikak között</span></div></div>`).join('');
 }
 function init(){enableDialogBackdropClose();document.getElementById('stats').innerHTML=`<div class="stat"><b>${matches.length}</b><span>mérkőzés</span></div><div class="stat"><b>48</b><span>csapat</span></div><div class="stat"><b>12</b><span>csoport</span></div><div class="stat"><b>16</b><span>helyszín</span></div>`;loadMatchData();renderStandings();[...new Set(matches.map(m=>m.stage))].forEach(s=>stageSel.add(new Option(tStage(s),s)));Object.keys(groups).forEach(g=>groupSel.add(new Option(g+' csoport',g))); stageSel.value=''; groupSel.value=''; render(); renderBracket();}
 function dateLabel(d){return new Date(d+'T12:00:00').toLocaleDateString('hu-HU',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}function escAttr(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;', '"':'&quot;'}[c]));}
@@ -2940,6 +3288,7 @@ function matchesGlobalQuery(m,q){
   return terms.every(term=>blob.includes(term));
 }
 function render(){
+  if(typeof calculateSlotLocks==='function') calculateSlotLocks();
   let q=search.value.trim(), st=stageSel.value, gr=groupSel.value;
   let filtered=matches.filter(m=>(!st||m.stage===st)&&(!gr||m.group===gr)&&matchesGlobalQuery(m,q));
   let by={};
@@ -2947,7 +3296,7 @@ function render(){
   calendar.innerHTML=Object.keys(by).sort().map(d=>`<h2 class="day">${dateLabel(d)}</h2><div class="grid">${by[d].sort((a,b)=>magyarRendezoKulcs(a)-magyarRendezoKulcs(b)).map(card).join('')}</div>`).join('')||'<div class="empty">Nincs találat.</div>';
   document.querySelectorAll('.match').forEach(el=>el.onclick=()=>openMatch(matches.find(m=>m.id==el.dataset.id)));
 }
-function card(m){let tag=m.group?`<span class="groupTag">${m.group} csoport</span>`:`<span class="ko">${esc(tStage(m.stage))}</span>`;const ctx=m.group?groups[m.group]:[m.teamA,m.teamB];return `<article class="match" data-id="${m.id}"><div class="top"><span class="badge">${m.id}. mérkőzés</span><span class="stage">${esc(tStage(m.stage))}</span></div><div class="teams">${teamAura(m.teamA,ctx)}<br>–<br>${teamAura(m.teamB,ctx)}</div><div class="meta">${tag}<br>${idoFelirat(m)}<br>${esc(m.venue)} · ${esc(m.city)}</div></article>`;}
+function card(m){let tag=m.group?`<span class="groupTag">${m.group} csoport</span>`:`<span class="ko">${esc(tStage(m.stage))}</span>`;const ctx=m.group?groups[m.group]:[resolveSlotTeamKey(m.teamA),resolveSlotTeamKey(m.teamB)];const finalStageClass=(m.stage==='Third Place'||m.id===103)?' bronzeMatch':((m.stage==='Final'||m.id===104)?' finalMatch':'');return `<article class="match${finalStageClass}" data-id="${m.id}"><div class="top"><span class="badge">${m.id}. mérkőzés</span><span class="stage">${esc(tStage(m.stage))}</span></div><div class="teams">${teamAura(m.teamA,ctx,false)}<br>–<br>${teamAura(m.teamB,ctx,false)}</div><div class="meta">${tag}<br>${idoFelirat(m)}<br>${esc(m.venue)} · ${esc(m.city)}</div></article>`;}
 function openMatch(m){
   modalStack=[];
   const savedJson = m.statsJson ? 'statisztikai JSON már csatolva' : 'még nincs JSON csatolva';
@@ -3233,6 +3582,56 @@ document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';
       applySearchV69(true);
     }));
   }
+  function isCompletedMatchV724(m){
+    // A 0-0 is valid: only null/empty/missing score means not played yet.
+    return /^\s*\d+\s*[-–:]\s*\d+\s*$/.test(String(m?.score ?? ''));
+  }
+  function calculateTournamentStateV724(){
+    const remaining=matches.filter(m=>!isCompletedMatchV724(m));
+    const activeVenues=uniq(remaining.map(m=>`${m.venue} · ${m.city}`).filter(Boolean)).length;
+    const remainingByStage=stage=>remaining.filter(m=>m.stage===stage).length;
+    const groupLeft=remainingByStage('Group Stage');
+    const r32Left=remainingByStage('Round of 32');
+    const r16Left=remainingByStage('Round of 16');
+    const qfLeft=remainingByStage('Quarter-finals');
+    const sfLeft=remainingByStage('Semi-finals');
+    const finalLeft=remainingByStage('Final');
+    const thirdLeft=remainingByStage('Third Place');
+    let currentStage='bajnok';
+    let activeTeams=1;
+    if(groupLeft>0){
+      const activeGroups=uniq(remaining.filter(m=>m.stage==='Group Stage').map(m=>m.group).filter(Boolean)).length || 12;
+      currentStage=`${activeGroups} csoport`;
+      activeTeams=48;
+    }else if(r32Left>0){
+      currentStage=`${r32Left} legjobb 32 meccs`;
+      activeTeams=32;
+    }else if(r16Left>0){
+      currentStage=`${r16Left} nyolcaddöntő`;
+      activeTeams=16;
+    }else if(qfLeft>0){
+      currentStage=`${qfLeft} negyeddöntő`;
+      activeTeams=8;
+    }else if(sfLeft>0){
+      currentStage=`${sfLeft} elődöntő`;
+      activeTeams=4;
+    }else if(finalLeft>0 && thirdLeft>0){
+      currentStage='döntő + bronzmeccs';
+      activeTeams=4;
+    }else if(finalLeft>0){
+      currentStage='döntő';
+      activeTeams=2;
+    }else if(thirdLeft>0){
+      currentStage='bronzmeccs';
+      activeTeams=2;
+    }
+    return {
+      matchesRemaining:remaining.length,
+      activeTeams,
+      currentStage,
+      activeVenues
+    };
+  }
   function applySearchV69(scrollToResults){
     const input=document.getElementById('search'), stageSel=document.getElementById('stage'), groupSel=document.getElementById('group');
     const q=(input?.value||'').trim(), st=stageSel?.value||'', gr=groupSel?.value||'';
@@ -3245,11 +3644,9 @@ document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';
       cal.innerHTML=Object.keys(by).sort().map(d=>`<h2 class="day">${dateLabel(d)}</h2><div class="grid">${by[d].sort((a,b)=>magyarRendezoKulcs(a)-magyarRendezoKulcs(b)).map(card).join('')}</div>`).join('')||'<div class="empty">Nincs találat.</div>';
       cal.querySelectorAll('.match').forEach(el=>el.onclick=()=>openMatch(matches.find(m=>m.id==el.dataset.id)));
     }
-    const teams=uniq(filtered.flatMap(m=>[m.teamA,m.teamB]));
-    const groupsFound=uniq(filtered.map(m=>m.group).filter(Boolean));
-    const venues=uniq(filtered.map(m=>`${m.venue} · ${m.city}`));
+    const tournamentState=calculateTournamentStateV724();
     const stats=document.getElementById('stats');
-    if(stats){stats.innerHTML=`<div class="stat"><b>${filtered.length}</b><span>találati mérkőzés</span></div><div class="stat"><b>${teams.length}</b><span>érintett csapat</span></div><div class="stat"><b>${groupsFound.length}</b><span>érintett csoport</span></div><div class="stat"><b>${venues.length}</b><span>érintett helyszín</span></div>`;}
+    if(stats){stats.innerHTML=`<div class="stat"><b>${tournamentState.matchesRemaining}</b><span>hátralévő mérkőzés</span></div><div class="stat"><b>${tournamentState.activeTeams}</b><span>aktív csapat</span></div><div class="stat"><b>${tournamentState.currentStage}</b><span>aktuális szakasz</span></div><div class="stat"><b>${tournamentState.activeVenues}</b><span>aktív helyszín</span></div>`;}
     const intro=document.getElementById('groupCalendarIntro');
     if(intro){
       const h=intro.querySelector('h2'); const p=intro.querySelector('p:not(.eyebrow)'); const e=intro.querySelector('.eyebrow');
@@ -3257,7 +3654,7 @@ document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';
       else { if(e)e.textContent='Csoportkör'; if(h)h.textContent='Teljes meccsnaptár'; if(p)p.textContent='Itt vannak magyar idő szerinti időrendben a csoportmeccsek és a teljes torna mérkőzései. A kártyák kattinthatók, később innen nyílik majd a csapat- és játékosadatlap is.'; }
     }
     const line=document.getElementById('searchResultLine');
-    if(line){ line.textContent=active ? `${filtered.length} meccstalálat · ${teams.length} csapat · ${venues.length} helyszín` : ''; }
+    if(line){ line.textContent=active ? `Találat: ${filtered.length} mérkőzés` : ''; }
     renderLiveSuggestionsV69();
     if(scrollToResults && intro){intro.scrollIntoView({behavior:'smooth',block:'start'});}
   }
