@@ -2906,6 +2906,64 @@ table.standingTable{
 .benchNameV813{font-size:12px;font-weight:850;color:rgba(238,245,255,.88);line-height:1.15;}
 @media(max-width:860px){.liveTeamBoardV812.homeViewV814,.liveTeamBoardV812.awayViewV814{grid-template-columns:1fr}.liveTeamBoardV812.homeViewV814 .teamSidePanelV812,.liveTeamBoardV812.homeViewV814 .tacticalPitchV812,.liveTeamBoardV812.awayViewV814 .teamSidePanelV812,.liveTeamBoardV812.awayViewV814 .tacticalPitchV812{order:initial}}
 @media(max-width:560px){.pitchPlayersLayerV813{inset:42px 22px 28px}.pitchJerseyV813{width:88px}.pitchJerseyV813 .shirtV813{width:40px;height:36px;font-size:12px}.pitchJerseyV813 .playerNameV813{max-width:88px;font-size:10px}}
+
+
+/* v82.1: LIVE HUD mobil-elrendezés + világos legenda + működő timeline modal */
+@media(max-width:620px){
+  .kickoffCountdownV797{width:min(430px,94vw)!important;padding:13px 12px 13px!important;border-radius:18px!important;}
+  .liveHubGridV810{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px 10px!important;
+    align-items:start!important;
+  }
+  .liveCenterV810{
+    grid-column:1 / -1!important;
+    order:-1!important;
+    min-width:0!important;
+    padding-top:0!important;
+  }
+  .liveHomeBlockV810,.liveAwayBlockV810{
+    min-width:0!important;
+    width:100%!important;
+    align-content:start!important;
+  }
+  .liveTeamNameV810{
+    width:100%!important;
+    max-width:100%!important;
+    font-size:clamp(18px,5.7vw,23px)!important;
+    line-height:1.05!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    padding:3px 2px!important;
+  }
+  .liveCardsV810{min-height:20px!important;font-size:9.5px!important;}
+  .liveCardLineV811{max-width:100%!important;padding:2px 5px!important;gap:4px!important;}
+  .liveGoalsV810{min-height:auto!important;font-size:10.5px!important;}
+  .liveGoalLineV810{white-space:normal!important;overflow-wrap:anywhere!important;}
+  .liveNoGoalV810,.liveNoCardV811{font-size:10px!important;}
+  .liveScoreValueV810{font-size:34px!important;}
+  .liveFeedHeadV817{width:100%!important;}
+  .liveFeedHeadV817 button{padding:6px 9px!important;color:#fff!important;background:rgba(119,214,255,.12)!important;border-color:rgba(119,214,255,.36)!important;}
+}
+@media(max-width:560px){
+  .legendSectionV72{background:linear-gradient(135deg,rgba(10,31,54,.94),rgba(3,10,20,.92))!important;}
+  .legendBlockV72{background:rgba(2,8,18,.70)!important;border-color:rgba(119,214,255,.42)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 12px 28px rgba(0,0,0,.22)!important;}
+  .legendPill,.trendLegendItem{
+    color:#fff!important;
+    background:rgba(4,14,28,.88)!important;
+    border-color:rgba(119,214,255,.55)!important;
+    text-shadow:0 1px 2px rgba(0,0,0,.55)!important;
+  }
+  .legendAura{width:58px!important;height:15px!important;border-color:rgba(255,255,255,.30)!important;}
+  .legendAura.red{background:linear-gradient(90deg,#ff4b5f,#ff142f)!important;box-shadow:0 0 18px rgba(255,45,70,.70)!important;}
+  .legendAura.neutral{background:linear-gradient(90deg,#ff8a2a,#ffd166)!important;box-shadow:0 0 18px rgba(255,180,60,.62)!important;}
+  .legendAura.green{background:linear-gradient(90deg,#20d879,#6ee7b7)!important;box-shadow:0 0 18px rgba(80,255,170,.66)!important;}
+  .trendSample{width:92px!important;height:10px!important;background:rgba(255,255,255,.18)!important;border:1px solid rgba(255,255,255,.15)!important;box-shadow:inset 0 0 8px rgba(0,0,0,.30)!important;}
+  .trendSample b{width:76%!important;box-shadow:0 0 15px rgba(110,231,183,.55)!important;}
+  .trendSample.trendFlat b,.trendSample.trendUp b{background:linear-gradient(90deg,#13b86b,#6ee7b7)!important;}
+  .trendSample.trendDown b{background:linear-gradient(90deg,#ff334c,#9f0718)!important;box-shadow:0 0 15px rgba(255,50,75,.55)!important;}
+}
+
 </style>
 
 </head>
@@ -2988,6 +3046,13 @@ table.standingTable{
       <div class="liveRefreshStamp" id="liveRefreshStampV802"></div>
     </div>
   </section>
+  <dialog class="liveTimelineDialogV817" id="liveTimelineDialogV817" aria-label="Teljes élő timeline">
+    <div class="liveTimelineHeadV817">
+      <h3>Teljes timeline</h3>
+      <button class="liveTimelineCloseV817" id="liveTimelineCloseV817" type="button">Bezárás</button>
+    </div>
+    <div class="liveTimelineBodyV817" id="liveTimelineBodyV817">LIVE adatra várakozás…</div>
+  </dialog>
   <section class="sectionIntro legendSectionV72" id="standingsIntro">
     <p class="eyebrow">Csoportállás</p>
     <h2>Élő tabellák</h2>
@@ -4807,7 +4872,7 @@ function renderStandings(){
 
 const WORLD_CUP_FIRST_KICKOFF = new Date('2026-06-11T21:00:00+02:00');
 const LIVE_WORKER_MATCH_URL_V802 = 'https://mute-lab-cf5a.gelatin72.workers.dev/demo-live';
-const LIVE_REFRESH_MS_V802 = 30000;
+const LIVE_REFRESH_MS_V802 = 10000;
 let kickoffCountdownTimer = null;
 let livePanelRefreshTimerV802 = null;
 function padCountdownUnit(n){ return String(n).padStart(2,'0'); }
@@ -4982,6 +5047,256 @@ function renderEventsV803(events){
 
 
 let latestLiveDataV812 = null;
+
+
+/* v82.0 LIVE SESSION BRAIN – belső adat-agy
+   Nem HUD: ez a réteg gyűjti, normalizálja, archiválja és továbbadja a meccsadatokat.
+   A látható LIVE panel csak az agy egyik kijelzője. */
+const LIVE_BRAIN_SAVE_KEY_V820 = 'worldcup2026_live_session_brain_v82';
+const LIVE_BRAIN_SCHEMA_V820 = 82;
+let liveBrainStateV820 = loadLiveBrainStateV820();
+
+function emptyLiveBrainStateV820(){
+  return {
+    schemaVersion: LIVE_BRAIN_SCHEMA_V820,
+    updatedAt: null,
+    activeMatchKey: null,
+    active: null,
+    archive: {},
+    teamStats: {},
+    playerStats: {},
+    auraFeed: {},
+    sessionLog: []
+  };
+}
+function loadLiveBrainStateV820(){
+  try{
+    const raw = localStorage.getItem(LIVE_BRAIN_SAVE_KEY_V820);
+    if(!raw) return emptyLiveBrainStateV820();
+    const parsed = JSON.parse(raw);
+    return {...emptyLiveBrainStateV820(), ...parsed, schemaVersion:LIVE_BRAIN_SCHEMA_V820};
+  }catch(e){
+    console.warn('LIVE Brain állapot nem olvasható:', e);
+    return emptyLiveBrainStateV820();
+  }
+}
+function saveLiveBrainStateV820(reason='live-brain-update'){
+  liveBrainStateV820.updatedAt = new Date().toISOString();
+  liveBrainStateV820.reason = reason;
+  try{ localStorage.setItem(LIVE_BRAIN_SAVE_KEY_V820, JSON.stringify(liveBrainStateV820)); }
+  catch(e){ console.warn('LIVE Brain mentés sikertelen:', e); }
+  window.liveBrainStateV820 = liveBrainStateV820;
+  return liveBrainStateV820;
+}
+function liveStatusCodeV820(data){
+  const status = data?.status || data?.fixture?.status || {};
+  return String(data?.mode || status.short || status.long || '').toUpperCase();
+}
+function liveIsFinishedV820(data){
+  const code = liveStatusCodeV820(data);
+  const long = String(data?.status?.long || data?.fixture?.status?.long || data?.statusText || '').toLowerCase();
+  return ['FT','AET','PEN'].includes(code) || long.includes('match finished') || long.includes('finished');
+}
+function liveSessionPhaseV820(data){
+  const code = liveStatusCodeV820(data);
+  if(liveIsFinishedV820(data)) return 'finished';
+  if(code === 'HT') return 'halftime';
+  if(['1H','2H','ET','BT','P','LIVE'].includes(code)) return 'live';
+  if(['NS','TBD'].includes(code)) return 'prelive';
+  return code ? 'live' : 'scheduled';
+}
+function liveFixtureIdV820(data){
+  return data?.fixture?.id || data?.fixture_id || data?.fixtureId || data?.matchId || data?.id || null;
+}
+function liveMatchKeyV820(data, homeName, awayName){
+  const id = liveFixtureIdV820(data);
+  if(id) return `fixture:${id}`;
+  const date = data?.fixture?.date || data?.date || data?.match?.date || '';
+  return `teams:${normalizeCompareV810(homeName)}-${normalizeCompareV810(awayName)}:${date}`;
+}
+function livePacketV820(data){
+  const homeName = data?.teams?.home?.name || data?.home?.name || data?.homeTeam?.name || 'Hazai';
+  const awayName = data?.teams?.away?.name || data?.away?.name || data?.awayTeam?.name || 'Vendég';
+  const events = collectEventsV802(data);
+  const score = scorePartsV810(data);
+  const venue = data?.fixture?.venue || data?.venue || data?.stadium || {};
+  const packet = {
+    matchKey: liveMatchKeyV820(data, homeName, awayName),
+    fixtureId: liveFixtureIdV820(data),
+    phase: liveSessionPhaseV820(data),
+    statusCode: liveStatusCodeV820(data),
+    statusText: statusLabelV803(data),
+    minute: normalizeMinuteV802(data?.status || data?.fixture?.status || {}),
+    teams: {home:homeName, away:awayName},
+    score,
+    scoreLabel: `${score.home}-${score.away}`,
+    events,
+    statistics: data?.statistics || data?.stats || null,
+    lineups: data?.lineups || data?.lineup || null,
+    weather: data?.weather || data?.meteo || data?.conditions || null,
+    venue: {
+      name:firstTextV817(data?.fixture?.venue?.name, venue.name, data?.stadium?.name),
+      city:firstTextV817(data?.fixture?.venue?.city, venue.city, data?.city, data?.location?.city),
+      altitude:firstTextV817(data?.altitude, venue.altitude, data?.location?.altitude)
+    },
+    rawMeta:{
+      source:data?.source || data?.mode || 'worker-live',
+      fetchedAt:new Date().toISOString()
+    }
+  };
+  return packet;
+}
+function liveLocalMatchForPacketV820(packet){
+  const numericId = Number(packet.fixtureId);
+  if(Number.isInteger(numericId)){
+    const byId = matches.find(m=>m.id === numericId);
+    if(byId) return byId;
+  }
+  const h = normalizeCompareV810(packet.teams.home), a = normalizeCompareV810(packet.teams.away);
+  return matches.find(m=>{
+    const ma = normalizeCompareV810(resolveSlotTeamKey(m.teamA));
+    const mb = normalizeCompareV810(resolveSlotTeamKey(m.teamB));
+    return (ma === h && mb === a) || (ma === a && mb === h);
+  }) || null;
+}
+function liveSafeBucketV820(obj, key, seed){
+  if(!obj[key]) obj[key] = seed;
+  return obj[key];
+}
+function liveEnsureTeamStatsV820(team){
+  return liveSafeBucketV820(liveBrainStateV820.teamStats, team, {
+    team, matchesFinished:0, goalsFor:0, goalsAgainst:0, goals:0, yellow:0, red:0, substitutions:0,
+    lastMatchKey:null, lastUpdated:null, formTrail:[]
+  });
+}
+function liveEnsurePlayerStatsV820(player, team){
+  const key = `${team || 'Ismeretlen'}|${player || 'Ismeretlen játékos'}`;
+  return liveSafeBucketV820(liveBrainStateV820.playerStats, key, {
+    player: player || 'Ismeretlen játékos', team: team || 'Ismeretlen', goals:0, assists:0, yellow:0, red:0, substitutionsIn:0, substitutionsOut:0,
+    eventCount:0, lastMatchKey:null, lastUpdated:null
+  });
+}
+function liveEventStatSignalV820(packet){
+  const out = {home:{goals:0,yellow:0,red:0,substitutions:0}, away:{goals:0,yellow:0,red:0,substitutions:0}};
+  packet.events.forEach(ev=>{
+    const side = eventSideV810(ev, packet.teams.home, packet.teams.away);
+    if(side !== 'home' && side !== 'away') return;
+    const kind = eventKindV803(ev);
+    if(kind === 'Gól') out[side].goals++;
+    if(kind === 'Sárga lap') out[side].yellow++;
+    if(kind === 'Piros lap') out[side].red++;
+    if(kind === 'Csere') out[side].substitutions++;
+  });
+  return out;
+}
+function liveArchivePacketV820(packet){
+  const existing = liveBrainStateV820.archive[packet.matchKey] || {};
+  liveBrainStateV820.archive[packet.matchKey] = {
+    ...existing,
+    ...packet,
+    timeline: packet.events,
+    snapshots:[...(existing.snapshots || []), {at:new Date().toISOString(), phase:packet.phase, minute:packet.minute, score:packet.scoreLabel}].slice(-120),
+    finalized: existing.finalized || false,
+    updatedAt:new Date().toISOString()
+  };
+}
+function liveUpdateAuraFeedV820(packet){
+  const momentum = calcMomentumV816({statistics:packet.statistics}, packet.teams.home, packet.teams.away, packet.events);
+  liveBrainStateV820.auraFeed[packet.matchKey] = {
+    matchKey:packet.matchKey,
+    teams:packet.teams,
+    score:packet.score,
+    phase:packet.phase,
+    minute:packet.minute,
+    momentum,
+    eventSignal:liveEventStatSignalV820(packet),
+    statistics:packet.statistics,
+    updatedAt:new Date().toISOString()
+  };
+}
+function liveFinalizePacketV820(packet){
+  const archived = liveBrainStateV820.archive[packet.matchKey];
+  if(archived?.finalized) return;
+  const signal = liveEventStatSignalV820(packet);
+  const home = liveEnsureTeamStatsV820(packet.teams.home);
+  const away = liveEnsureTeamStatsV820(packet.teams.away);
+  home.matchesFinished += 1; away.matchesFinished += 1;
+  home.goalsFor += Number(packet.score.home || 0); home.goalsAgainst += Number(packet.score.away || 0);
+  away.goalsFor += Number(packet.score.away || 0); away.goalsAgainst += Number(packet.score.home || 0);
+  ['home','away'].forEach(side=>{
+    const team = side === 'home' ? home : away;
+    team.goals += signal[side].goals;
+    team.yellow += signal[side].yellow;
+    team.red += signal[side].red;
+    team.substitutions += signal[side].substitutions;
+    team.lastMatchKey = packet.matchKey;
+    team.lastUpdated = new Date().toISOString();
+    team.formTrail = [...(team.formTrail || []), {matchKey:packet.matchKey, gf:side==='home'?packet.score.home:packet.score.away, ga:side==='home'?packet.score.away:packet.score.home}].slice(-8);
+  });
+  packet.events.forEach(ev=>{
+    const team = eventTeamNameV810(ev) || '';
+    const player = eventPlayerNameV810(ev) || '';
+    if(!player) return;
+    const ps = liveEnsurePlayerStatsV820(player, team);
+    const kind = eventKindV803(ev);
+    if(kind === 'Gól') ps.goals += 1;
+    if(kind === 'Sárga lap') ps.yellow += 1;
+    if(kind === 'Piros lap') ps.red += 1;
+    if(kind === 'Csere') ps.substitutionsOut += 1;
+    const assist = safeNameV810(ev?.assist);
+    if(kind === 'Gól' && assist){ liveEnsurePlayerStatsV820(assist, team).assists += 1; }
+    ps.eventCount += 1;
+    ps.lastMatchKey = packet.matchKey;
+    ps.lastUpdated = new Date().toISOString();
+  });
+  const localMatch = liveLocalMatchForPacketV820(packet);
+  if(localMatch){
+    const score = `${Number(packet.score.home || 0)}-${Number(packet.score.away || 0)}`;
+    localMatch.score = score;
+    localMatch.status = 'completed';
+    localMatch.events = packet.events;
+    localMatch.teamStats = packet.statistics || {};
+    localMatch.statsJson = {
+      source:'LIVE Session Brain v82.0',
+      matchKey:packet.matchKey,
+      fixtureId:packet.fixtureId,
+      finalizedAt:new Date().toISOString(),
+      score,
+      teams:packet.teams,
+      timeline:packet.events,
+      statistics:packet.statistics,
+      lineups:packet.lineups,
+      weather:packet.weather,
+      venue:packet.venue,
+      auraFeed:liveBrainStateV820.auraFeed[packet.matchKey] || null
+    };
+    saveAllMatchData('LIVE Session Brain véglegesítés');
+    renderStandings(); render(); renderBracket();
+  }
+  if(liveBrainStateV820.archive[packet.matchKey]) liveBrainStateV820.archive[packet.matchKey].finalized = true;
+  liveBrainStateV820.sessionLog = [...(liveBrainStateV820.sessionLog || []), {at:new Date().toISOString(), type:'finalized', matchKey:packet.matchKey, score:packet.scoreLabel}].slice(-200);
+}
+function processLiveBrainV820(data){
+  const packet = livePacketV820(data);
+  liveBrainStateV820.activeMatchKey = packet.matchKey;
+  liveBrainStateV820.active = packet;
+  liveArchivePacketV820(packet);
+  liveUpdateAuraFeedV820(packet);
+  if(packet.phase === 'finished') liveFinalizePacketV820(packet);
+  saveLiveBrainStateV820(packet.phase === 'finished' ? 'finished-packet' : 'live-packet');
+  return packet;
+}
+function nextScheduledMatchV820(){
+  const now = Date.now();
+  return matches
+    .filter(m=>m.status !== 'completed')
+    .map(m=>({m, t:new Date(`${m.date}T${m.timeET || m.timeLocal || '00:00'}:00+02:00`).getTime()}))
+    .filter(x=>Number.isFinite(x.t))
+    .sort((a,b)=>Math.abs(a.t-now)-Math.abs(b.t-now))[0]?.m || null;
+}
+window.liveBrainStateV820 = liveBrainStateV820;
+window.processLiveBrainV820 = processLiveBrainV820;
+window.nextScheduledMatchV820 = nextScheduledMatchV820;
 function liveTeamNameBySideV812(side){
   const data = latestLiveDataV812 || {};
   return side === 'away'
@@ -5460,6 +5775,7 @@ function bindTimelineToggleV817(els){
 
 function renderLivePanelV802(data){
   latestLiveDataV812 = data;
+  processLiveBrainV820(data);
   const els = livePanelElsV802();
   if(!els.panel) return;
   const status = data?.status || data?.fixture?.status || {};
@@ -5620,7 +5936,7 @@ function collectMatchData(){
   const matchData={};
   matches.forEach(m=>{
     if(m.score || m.statsJson){
-      matchData[m.id]={score:m.score||null,status:m.status||'scheduled',statsJson:m.statsJson||null};
+      matchData[m.id]={score:m.score||null,status:m.status||'scheduled',statsJson:m.statsJson||null,events:m.events||[],teamStats:m.teamStats||{},playerStats:m.playerStats||{}};
     }
   });
   return matchData;
@@ -5629,7 +5945,7 @@ function buildWorldCupState(reason='manual'){
   const matchData=collectMatchData();
   return {
     app:'FIFA World Cup 2026 – Interaktív naptár',
-    schemaVersion:35,
+    schemaVersion:82,
     savedAt:new Date().toISOString(),
     reason,
     matchData
@@ -5643,6 +5959,9 @@ function applyWorldCupState(state){
       m.score=row.score||null;
       m.status=row.status||m.status;
       m.statsJson=row.statsJson||null;
+      m.events=row.events||m.events||[];
+      m.teamStats=row.teamStats||m.teamStats||{};
+      m.playerStats=row.playerStats||m.playerStats||{};
     }
   });
 }
