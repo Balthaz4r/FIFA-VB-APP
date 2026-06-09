@@ -6323,6 +6323,460 @@ document.getElementById('reset').onclick=()=>{search.value='';stageSel.value='';
 })();
 </script>
 
+
+
+<style id="v82_2_rateflow_mobile_bright_fix">
+/* v82.2 — Rátavonal / Formaáram mobil fényjavítás
+   Ok: a régebbi nyilas pseudo-elementek és néhány mobil kontraszt-szabály sötét overlayt hagytak a rátavonalakon.
+   Megoldás: a formaáram mindenhol valódi világos fénycsík, nem sötét karakter/overlay. */
+.playerPowerLine .playerPowerFill,
+.trendSample b,
+.teamAura .auraRateFill{
+  position:relative !important;
+  overflow:hidden !important;
+  isolation:isolate !important;
+}
+.playerPowerLine.trendUp .playerPowerFill:after,
+.playerPowerLine.trendDown .playerPowerFill:after,
+.trendSample.trendUp b:after,
+.trendSample.trendDown b:after,
+.teamAura.teamStaminaUp .auraRateFill:after,
+.teamAura.teamStaminaDown .auraRateFill:after{
+  content:"" !important;
+  position:absolute !important;
+  top:-35% !important;
+  bottom:-35% !important;
+  left:0 !important;
+  right:auto !important;
+  width:38% !important;
+  display:block !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.20) 24%,
+    rgba(255,255,255,.92) 50%,
+    rgba(255,255,255,.20) 76%,
+    rgba(255,255,255,0) 100%) !important;
+  opacity:.95 !important;
+  color:transparent !important;
+  text-shadow:none !important;
+  mix-blend-mode:screen !important;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.42)) !important;
+  transform:none;
+  will-change:transform !important;
+  pointer-events:none !important;
+  z-index:2 !important;
+}
+.playerPowerLine.trendUp .playerPowerFill:after,
+.trendSample.trendUp b:after,
+.teamAura.teamStaminaUp .auraRateFill:after{
+  animation:formaMobileBrightFlowRight 2.3s linear infinite !important;
+}
+.playerPowerLine.trendDown .playerPowerFill:after,
+.trendSample.trendDown b:after,
+.teamAura.teamStaminaDown .auraRateFill:after{
+  animation:formaMobileBrightFlowLeft 2.3s linear infinite !important;
+}
+@keyframes formaMobileBrightFlowRight{
+  from{transform:translateX(-125%);}
+  to{transform:translateX(330%);}
+}
+@keyframes formaMobileBrightFlowLeft{
+  from{transform:translateX(330%);}
+  to{transform:translateX(-125%);}
+}
+.trendSample,
+.playerPowerLine,
+.teamAura .auraRateTrack{
+  background:rgba(255,255,255,.20) !important;
+  border-color:rgba(255,255,255,.18) !important;
+}
+.trendSample.trendFlat b,
+.trendSample.trendUp b,
+.playerPowerLine.trendFlat .playerPowerFill,
+.playerPowerLine.trendUp .playerPowerFill{
+  background:linear-gradient(90deg,#13b86b,#6ee7b7) !important;
+  box-shadow:0 0 12px rgba(110,231,183,.50) !important;
+}
+.trendSample.trendDown b,
+.playerPowerLine.trendDown .playerPowerFill{
+  background:linear-gradient(90deg,#ff334c,#b4081e) !important;
+  box-shadow:0 0 12px rgba(255,50,75,.50) !important;
+}
+@media(max-width:700px){
+  .legendBlockV72{
+    background:rgba(5,16,32,.86) !important;
+    border-color:rgba(119,214,255,.48) !important;
+  }
+  .trendLegendItem{
+    background:rgba(3,10,22,.64) !important;
+    border-color:rgba(119,214,255,.34) !important;
+    color:#eef5ff !important;
+  }
+  .trendSample{
+    width:96px !important;
+    height:11px !important;
+    background:rgba(255,255,255,.22) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 0 10px rgba(119,214,255,.10) !important;
+  }
+  .trendSample b{opacity:1 !important;}
+}
+@media (prefers-reduced-motion: reduce){
+  .playerPowerLine.trendUp .playerPowerFill:after,
+  .playerPowerLine.trendDown .playerPowerFill:after,
+  .trendSample.trendUp b:after,
+  .trendSample.trendDown b:after,
+  .teamAura.teamStaminaUp .auraRateFill:after,
+  .teamAura.teamStaminaDown .auraRateFill:after{
+    animation:none !important;
+    opacity:.85 !important;
+  }
+}
+</style>
+
+
+
+<style id="v82_3_mobile_layout_rebuild">
+/* v82.3 — MOBILE LAYOUT REBUILD
+   Vizsgálat: a mobil hibákat régi desktop-override rétegek okozták.
+   Pontos kijelölés: kieséses ág, meccskártyák, csoporttabellák, rátavonal alapréteg.
+   Régi mobil viselkedés ki: mobilon nem desktop-rácsot préselünk össze.
+   Új mobil viselkedés be: önálló mobil szabályok, desktop érintetlenül. */
+
+@media(max-width:700px){
+  html,body{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
+  main{
+    width:100% !important;
+    max-width:100% !important;
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  /* 1) MECCSNAPTÁR — egyoszlopos, valóban középre zárt mobil kártyák */
+  #calendar,
+  .calendar{
+    width:100% !important;
+    max-width:100% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    overflow-x:hidden !important;
+  }
+  #calendar .day,
+  .day{
+    width:100% !important;
+    max-width:430px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    text-align:center !important;
+  }
+  #calendar .grid,
+  .grid{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    width:100% !important;
+    max-width:430px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    gap:14px !important;
+  }
+  #calendar .match,
+  .match{
+    width:100% !important;
+    max-width:420px !important;
+    min-width:0 !important;
+    flex:0 0 auto !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    align-self:center !important;
+    transform:none !important;
+  }
+  #calendar .match:hover,
+  .match:hover{
+    transform:none !important;
+  }
+
+  /* 2) CSOPORTTÁBLÁK — minden oszlop látszik: #, csapat, M, GY, D, V, RG, KG, GK, P */
+  #groups.groups{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    width:100% !important;
+    max-width:430px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    gap:18px !important;
+    overflow:visible !important;
+  }
+  #groups .group.standings,
+  .group.standings{
+    width:100% !important;
+    max-width:430px !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+  #groups .groupHead{
+    padding:12px 12px !important;
+  }
+  #groups .groupHead h3{
+    font-size:18px !important;
+  }
+  #groups .groupHead span{
+    display:none !important;
+  }
+  #groups .tableWrap,
+  .group.standings .tableWrap{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:visible !important;
+  }
+  #groups table.standingTable,
+  table.standingTable{
+    width:100% !important;
+    max-width:100% !important;
+    table-layout:fixed !important;
+    border-collapse:collapse !important;
+    font-size:clamp(8.8px,2.55vw,10.5px) !important;
+  }
+  #groups .standingTable th,
+  #groups .standingTable td,
+  .standingTable th,
+  .standingTable td{
+    padding:8px 1px !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    text-align:center !important;
+  }
+  #groups .standingTable th:nth-child(1),
+  #groups .standingTable td:nth-child(1),
+  .standingTable th:nth-child(1),
+  .standingTable td:nth-child(1){
+    width:5.5% !important;
+  }
+  #groups .standingTable th:nth-child(2),
+  #groups .standingTable td:nth-child(2),
+  .standingTable th:nth-child(2),
+  .standingTable td:nth-child(2){
+    width:40.5% !important;
+    text-align:left !important;
+  }
+  #groups .standingTable th:nth-child(n+3),
+  #groups .standingTable td:nth-child(n+3),
+  .standingTable th:nth-child(n+3),
+  .standingTable td:nth-child(n+3){
+    width:6.75% !important;
+  }
+  #groups .standingTable th{
+    font-size:clamp(7px,2.05vw,8.8px) !important;
+    letter-spacing:.015em !important;
+  }
+  #groups .standingTable td.team,
+  .standingTable td.team{
+    overflow:hidden !important;
+    text-overflow:clip !important;
+  }
+  #groups .standingTable td.team .teamAura,
+  #groups .standingTable td.team .team-aura,
+  #groups .standingTable td.team .auraName,
+  #groups .standingTable td.team .teamPill,
+  #groups .standingTable td.team .teamPowerName,
+  .standingTable td.team .teamAura,
+  .standingTable td.team .team-aura,
+  .standingTable td.team .auraName,
+  .standingTable td.team .teamPill,
+  .standingTable td.team .teamPowerName{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    padding-left:6px !important;
+    padding-right:6px !important;
+    font-size:clamp(10px,3.2vw,13px) !important;
+    line-height:1.05 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+  #groups .qualLegend,
+  .qualLegend{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    gap:8px !important;
+    padding:10px 8px !important;
+    font-size:12px !important;
+    text-align:center !important;
+  }
+
+  /* 3) KIESÉSES SZAKASZ — mobilon nem desktop-fa, hanem stabil, olvasható lista */
+  #knockoutBracket.bracketWrap{
+    width:100% !important;
+    max-width:430px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:16px 10px 20px !important;
+    overflow-x:hidden !important;
+    overflow-y:visible !important;
+  }
+  #knockoutBracket .bracketTitle,
+  #knockoutBracket .bracketLead{
+    max-width:100% !important;
+    text-align:center !important;
+  }
+  #knockoutBracket .bracketLead{
+    font-size:13px !important;
+    line-height:1.45 !important;
+    margin-bottom:14px !important;
+  }
+  #knockoutBracket .bracket{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    height:auto !important;
+    min-height:0 !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    gap:10px !important;
+    margin:12px auto 0 !important;
+    overflow:visible !important;
+  }
+  #knockoutBracket .bracketLineSvg,
+  #knockoutBracket .roundLabel,
+  #knockoutBracket .sideLabel{
+    display:none !important;
+  }
+  #knockoutBracket .uploadedTrophy{
+    display:block !important;
+    position:static !important;
+    grid-area:auto !important;
+    order:-2 !important;
+    width:96px !important;
+    max-width:32vw !important;
+    max-height:none !important;
+    margin:4px auto 10px !important;
+    align-self:center !important;
+  }
+  #knockoutBracket .brCard,
+  #knockoutBracket .brCard.final,
+  #knockoutBracket .brCard.brGhost{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    position:relative !important;
+    grid-area:auto !important;
+    width:100% !important;
+    max-width:390px !important;
+    min-width:0 !important;
+    min-height:82px !important;
+    padding:11px 10px !important;
+    border-radius:15px !important;
+    overflow:hidden !important;
+    align-self:center !important;
+    justify-self:auto !important;
+    transform:none !important;
+    z-index:2 !important;
+  }
+  #knockoutBracket .brCard:hover{
+    transform:none !important;
+  }
+  #knockoutBracket .brCard::before,
+  #knockoutBracket .brCard::after,
+  #knockoutBracket .brCol::before,
+  #knockoutBracket .brCol::after{
+    display:none !important;
+    content:none !important;
+  }
+  #knockoutBracket .brNo{
+    align-self:center !important;
+    margin:0 auto 7px !important;
+    font-size:10px !important;
+  }
+  #knockoutBracket .brTeams{
+    font-size:13px !important;
+    line-height:1.25 !important;
+    text-align:center !important;
+    overflow:hidden !important;
+    overflow-wrap:anywhere !important;
+  }
+  #knockoutBracket .brMeta{
+    font-size:10.5px !important;
+    line-height:1.25 !important;
+    text-align:center !important;
+  }
+  #knockoutBracket .teamAura,
+  #knockoutBracket .team-aura,
+  #knockoutBracket .auraName,
+  #knockoutBracket .teamPill,
+  #knockoutBracket .teamPowerName{
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+  #knockoutBracket .mobileHint{
+    display:block !important;
+    color:var(--muted) !important;
+    text-align:center !important;
+    font-size:12px !important;
+    margin-top:12px !important;
+  }
+  #knockoutBracket .mobileHint::before{
+    content:"Mobilnézet: a kieséses ág rendezett listában jelenik meg.";
+  }
+  #knockoutBracket .mobileHint{
+    font-size:0 !important;
+  }
+  #knockoutBracket .mobileHint::before{
+    font-size:12px !important;
+  }
+
+  /* 4) RÁTAVONAL — a világosítás ne csak a fénycsíkra, hanem az alaptrackre is hasson */
+  .trendSample,
+  .playerPowerLine,
+  .teamAura .auraRateTrack{
+    background:rgba(255,255,255,.26) !important;
+    border-color:rgba(255,255,255,.22) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),0 0 12px rgba(119,214,255,.10) !important;
+  }
+  .trendSample b,
+  .playerPowerLine .playerPowerFill,
+  .teamAura .auraRateFill{
+    opacity:1 !important;
+  }
+}
+
+@media(max-width:380px){
+  #groups table.standingTable,
+  table.standingTable{
+    font-size:8.4px !important;
+  }
+  #groups .standingTable th,
+  #groups .standingTable td,
+  .standingTable th,
+  .standingTable td{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  #groups .standingTable td.team .teamAura,
+  #groups .standingTable td.team .team-aura,
+  #groups .standingTable td.team .auraName,
+  #groups .standingTable td.team .teamPill,
+  #groups .standingTable td.team .teamPowerName{
+    font-size:11px !important;
+    padding-left:4px !important;
+    padding-right:4px !important;
+  }
+}
+</style>
+
 </body>
 
 </html>
