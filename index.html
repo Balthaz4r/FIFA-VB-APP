@@ -1210,18 +1210,27 @@
   #standingsIntro.legendSectionV72{margin:26px auto 16px;padding:20px 12px;border-radius:22px;}
   #standingsIntro.legendSectionV72 h2{font-size:32px;}
   #standingsIntro.legendSectionV72 > p{font-size:15px;}
-  #standingsIntro .legendBlockV72{padding:12px 10px;margin-top:14px;}
+  #standingsIntro .legendBlockV72{padding:12px 10px;margin-top:14px;background:rgba(4,12,22,.34);}
   #standingsIntro .auraLegendV72,
   #standingsIntro .trendLegendV72{align-items:stretch;gap:8px;font-size:12.5px;}
   #standingsIntro .legendPill,
-  #standingsIntro .trendLegendItem{width:100%;}
+  #standingsIntro .trendLegendItem{width:100%;min-height:42px;padding:10px 14px;background:rgba(7,18,33,.54);border-color:rgba(119,214,255,.46);}
+  #standingsIntro .trendSample{width:88px;height:11px;flex:0 0 88px;background:rgba(255,255,255,.24);box-shadow:0 0 10px rgba(255,255,255,.10), inset 0 0 0 1px rgba(255,255,255,.12);}
+  #standingsIntro .trendSample b{width:76%;opacity:1;}
+  #standingsIntro .trendSample.trendFlat b,
+  #standingsIntro .trendSample.trendUp b{background:linear-gradient(90deg,rgba(49,218,128,.94),rgba(119,255,188,.98));box-shadow:0 0 18px rgba(63,230,143,.70),0 0 7px rgba(255,255,255,.18) inset;}
+  #standingsIntro .trendSample.trendDown b{background:linear-gradient(90deg,rgba(255,67,85,.98),rgba(214,35,55,.96));box-shadow:0 0 18px rgba(255,67,85,.70),0 0 7px rgba(255,255,255,.16) inset;}
+  #standingsIntro .trendSample.trendUp b::after,
+  #standingsIntro .trendSample.trendDown b::after,
+  #groups .standingTable .teamAura.teamStaminaUp .auraRateFill::after,
+  #groups .standingTable .teamAura.teamStaminaDown .auraRateFill::after{opacity:.96;}
   #groups.groups{width:100%;max-width:100%;gap:14px;margin-top:20px;}
   #groups .groupHead{min-height:58px;padding:10px 12px;}
   #groups .groupHead h3{font-size:16px;min-height:34px;padding:6px 10px;}
   #groups .groupHead span{font-size:11px;}
   #groups table.standingTable{font-size:11px;}
   #groups .standingTable th,
-  #groups .standingTable td{height:52px;padding:5px 3px;}
+  #groups .standingTable td{height:60px;padding:6px 3px;}
   #groups .standingTable th{height:30px;font-size:9px;letter-spacing:.035em;}
   #groups .standingTable th:nth-child(1),
   #groups .standingTable td:nth-child(1){width:24px;}
@@ -1229,9 +1238,11 @@
   #groups .standingTable td:nth-child(2){width:43%;}
   #groups .standingTable th:nth-child(n+3),
   #groups .standingTable td:nth-child(n+3){width:7.1%;}
-  #groups .standingTable .teamAura{width:min(160px,100%);min-height:44px;padding:6px 10px 13px;}
-  #groups .standingTable .teamAura .auraName{font-size:12px;}
-  #groups .standingTable .auraRateTrack{left:12px;right:12px;bottom:5px;height:5px;}
+  #groups .standingTable .teamAura{width:min(164px,100%);min-height:52px;padding:7px 11px 18px;border-color:rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),calc(var(--aura-alpha,.60) * 1.18));background:radial-gradient(circle at 50% 35%,rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),calc(var(--aura-bg,.12) * 2.05)),transparent 62%),linear-gradient(180deg,rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),calc(var(--aura-bg,.12) * .95)),rgba(7,18,33,.58));box-shadow:0 0 calc(var(--aura-glow,18px) * 1.18) rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),calc(var(--aura-alpha,.50) * .78)),0 0 calc(var(--aura-glow,18px) * 2.2) rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),calc(var(--aura-alpha,.50) * .30)),inset 0 0 0 1px rgba(255,255,255,.07);}
+  #groups .standingTable .teamAura .auraName{font-size:12px;line-height:1.08;}
+  #groups .standingTable .teamAura.neutral{background:linear-gradient(180deg,rgba(18,44,74,.76),rgba(7,18,33,.58));}
+  #groups .standingTable .auraRateTrack{left:12px;right:12px;bottom:7px;height:8px;background:rgba(255,255,255,.28);box-shadow:0 0 10px rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.12);}
+  #groups .standingTable .auraRateFill{opacity:1;background:linear-gradient(90deg,rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),.88),rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),1));box-shadow:0 0 15px rgba(var(--aura-r,84),var(--aura-g,255),var(--aura-b,176),.72),0 0 6px rgba(255,255,255,.15) inset;}
   #groups .qualLegendV72{font-size:12px;padding:10px 8px;}
   #groups .qualLegendV72 span{width:100%;padding:8px 10px;border:1px solid rgba(119,214,255,.32);border-radius:999px;background:rgba(7,18,33,.64);}
 }
